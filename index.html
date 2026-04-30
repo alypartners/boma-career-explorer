@@ -572,6 +572,45 @@ header {
     <ellipse cx="775" cy="541" rx="13" ry="10" fill="#15803d"/>
 
     <!-- ══════════════════════════════════════
+         PORTER WITH CART (outside building, left of lobby)
+         ══════════════════════════════════════ -->
+    <!-- Cart frame -->
+    <rect x="238" y="536" width="26" height="20" fill="#475569" rx="2"/>
+    <!-- Cart shelf -->
+    <line x1="239" y1="547" x2="263" y2="547" stroke="#334155" stroke-width="1.2"/>
+    <!-- Cart handle (vertical post) -->
+    <line x1="238" y1="536" x2="235" y2="516" stroke="#94a3b8" stroke-width="1.8"/>
+    <!-- Cart handle (grip bar) -->
+    <line x1="228" y1="516" x2="235" y2="516" stroke="#94a3b8" stroke-width="1.8"/>
+    <!-- Cart wheels -->
+    <circle cx="243" cy="557" r="3.5" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+    <circle cx="258" cy="557" r="3.5" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+    <!-- Supplies on cart -->
+    <rect x="241" y="527" width="4" height="9" fill="#2563eb" rx="0.5"/>
+    <rect x="247" y="525" width="4" height="11" fill="#16a34a" rx="0.5"/>
+    <rect x="253" y="528" width="5" height="8" fill="#f1f5f9" rx="1"/>
+    <!-- Mop handle leaning on cart -->
+    <line x1="262" y1="555" x2="270" y2="512" stroke="#92400e" stroke-width="2"/>
+    <rect x="267" y="509" width="6" height="4" fill="#b45309" rx="1"/>
+    <!-- Porter body (arm reaching to handle) -->
+    <line x1="228" y1="530" x2="236" y2="524" stroke="#1e3a5f" stroke-width="2.5"/>
+    <!-- Porter torso -->
+    <rect x="219" y="521" width="10" height="16" fill="#e2e8f0" rx="1"/>
+    <!-- Porter waist belt -->
+    <rect x="219" y="533" width="10" height="2.5" fill="#94a3b8"/>
+    <!-- Porter legs -->
+    <line x1="221" y1="537" x2="219" y2="556" stroke="#1e293b" stroke-width="3.5"/>
+    <line x1="227" y1="537" x2="229" y2="556" stroke="#1e293b" stroke-width="3.5"/>
+    <!-- Porter feet -->
+    <rect x="216" y="554" width="7" height="3" fill="#0f172a" rx="1"/>
+    <rect x="226" y="554" width="7" height="3" fill="#0f172a" rx="1"/>
+    <!-- Porter head -->
+    <circle cx="224" cy="516" r="6" fill="#c8956c"/>
+    <!-- Porter cap -->
+    <rect x="218" y="509" width="13" height="4" fill="#1e3a5f" rx="1"/>
+    <rect x="217" y="511" width="15" height="2" fill="#1e3a5f" rx="0.5"/>
+
+    <!-- ══════════════════════════════════════
          CLICKABLE ZONE HIGHLIGHTS (on top of everything)
          ══════════════════════════════════════ -->
     <!-- Zone: ROOF -->
@@ -797,10 +836,11 @@ const ZONES = {
       { title: 'Roofing Contractor',    salary: '$42K–$75K/yr',  note: 'Inspection, repair, waterproofing' },
     ],
     pathways: [
-      'HVAC/R certification at a community college or trade school (6–18 months)',
-      'Registered apprenticeship with a local mechanical contractor',
-      'Associate degree in Building Systems or Mechanical Technology',
-      'EPA 608 certification — required for refrigerant handling, earnable now',
+      'No 4-year degree required — a certificate or apprenticeship is the fastest path in',
+      'Austin Community College (ACC) — HVAC Technology certificate, as little as one semester',
+      'Texas State Technical College (TSTC) — HVAC Technology AAS degree and short certificates',
+      'Registered apprenticeship with a local mechanical contractor (earn while you learn)',
+      'EPA 608 certification — required for refrigerant handling, earnable while still in school',
       'ASHRAE student membership — the top HVAC professional organization',
     ],
     fact: 'Commercial buildings use 40% of all U.S. energy — and HVAC alone accounts for ~40% of a building\'s energy bill. An HVAC career means working on the frontline of climate and cost.',
@@ -819,11 +859,12 @@ const ZONES = {
       { title: 'Curtain Wall Specialist',   salary: '$50K–$90K/yr',  note: 'High-tech glass systems' },
     ],
     pathways: [
-      'On-the-job training — many window cleaning companies hire with zero experience',
+      'No 4-year degree required — most companies hire entry-level with on-the-job training',
+      'ACC (Austin Community College) — Building Maintenance Technology certificate',
+      'TSTC — Building Construction Technology program with hands-on exterior systems training',
       'SPRAT (Society of Professional Rope Access Technicians) certification',
-      'IWCA (International Window Cleaning Association) training programs',
       'OSHA 10 or 30-hour safety certification — often required, earnable online',
-      'Building maintenance associate programs at local community colleges',
+      'IWCA (International Window Cleaning Association) training programs',
     ],
     fact: 'Frost Bank Tower\'s glass curtain wall requires a specialized rope-access crew several days to clean the exterior — and that happens multiple times per year. Technicians certified in rope access can work on skyscrapers worldwide.',
     next: 'Reach out to local commercial cleaning companies for summer or part-time work. OSHA 10 courses are available online at oshaeducationcenter.com. IWCA directory at iwca.org.',
@@ -842,12 +883,13 @@ const ZONES = {
       { title: 'Commercial Broker',        salary: '$60K–$200K+/yr', note: 'Highly commission-driven' },
     ],
     pathways: [
-      'Business, Finance, or Real Estate degree (4-year university)',
+      'ACC — Real Estate Sales Agent certificate program (no 4-year degree required to get licensed)',
+      'Texas Real Estate License — 180-hour course + state exam, available at ACC and online',
+      'Business, Finance, or Real Estate degree (UT Austin, St. Edward\'s, ACC transfer path)',
       'IREM CPM® (Certified Property Manager) designation — the industry gold standard',
       'BOMI RPA® (Real Property Administrator) designation',
-      'Texas Real Estate License — required for leasing/brokerage (180-hour course + exam)',
       'BOMA Young Professionals program — networking + continuing education',
-      'Internships with major firms: JLL, CBRE, Cushman & Wakefield, Transwestern',
+      'Internships with Austin-area firms: Endeavor Real Estate Group, Stream Realty, Kilroy Realty, Aquila Commercial',
     ],
     fact: 'Commercial Real Estate is a multi-trillion dollar U.S. industry. The property manager at Frost Bank Tower oversees millions of dollars in assets and dozens of tenant relationships — decisions they make daily affect hundreds of businesses.',
     next: 'Join IREM\'s student chapter at irem.org/students. Connect with BOMA Austin for events and mentorship. Search LinkedIn for CRE internships in the Austin metro.',
@@ -858,21 +900,21 @@ const ZONES = {
     color: '#0f766e',
     tagline: 'The foundation every thriving building is built on',
     careers: [
-      { title: 'Facilities Manager',           salary: '$60K–$110K/yr', note: 'Oversees all building operations' },
-      { title: 'Janitorial Supervisor',         salary: '$38K–$65K/yr',  note: 'Manages cleaning teams & schedules' },
-      { title: 'Environmental Services Dir.',   salary: '$55K–$95K/yr',  note: 'Sanitation + compliance' },
-      { title: 'Building Operations Specialist',salary: '$45K–$80K/yr',  note: 'Day-to-day systems oversight' },
-      { title: 'Industrial Hygienist',          salary: '$65K–$105K/yr', note: 'Air quality, mold, safety' },
+      { title: 'Facilities Manager',                    salary: '$60K–$110K/yr', note: 'Oversees all building operations' },
+      { title: 'Janitorial Supervisor / Account Mgr',   salary: '$38K–$65K/yr',  note: 'Manage a district of cleaning teams as your own business unit' },
+      { title: 'Building Operations Specialist',        salary: '$45K–$80K/yr',  note: 'Day-to-day systems oversight' },
+      { title: 'Porter / Day Porter',                   salary: '$28K–$42K/yr',  note: 'Entry-level, great starting point' },
     ],
     pathways: [
-      'IFMA FMP® (Facility Management Professional) — key entry-level credential',
+      'No college experience necessary — many successful careers start as a day porter',
+      'Spanish-speaking skills encouraged and often preferred by employers',
+      'BSCAI (Building Service Contractors Association International) training programs',
+      'IFMA FMP® (Facility Management Professional) — key credential for moving into management',
       'IFMA CFM® (Certified Facility Manager) for experienced professionals',
-      'Associate or bachelor\'s degree in Facilities Management, Business, or Engineering',
-      'BSCAI (Building Service Contractors Association International) training',
-      'Start as a building porter or technician and advance through experience',
+      'ACC — Facilities and operations-related coursework available for those seeking advancement',
     ],
     fact: 'Facilities managers handle everything from floor-care scheduling to emergency preparedness. Clean, well-maintained buildings retain tenants longer and command higher rents — this role directly drives property value.',
-    next: 'IFMA at ifma.org has student chapters at many universities, including UT Austin. The FMP certification is a great first credential to earn early in your career.',
+    next: 'Start by applying to porter or day porter roles — no degree required. BSCAI at bscai.org has training and career path resources. IFMA at ifma.org for those looking to grow into management.',
   },
   lobby: {
     title: 'Lobby, Security & Guest Services',
@@ -880,18 +922,18 @@ const ZONES = {
     color: '#b91c1c',
     tagline: 'First impressions and around-the-clock protection',
     careers: [
-      { title: 'Security Director',          salary: '$65K–$110K/yr', note: 'Full building security program' },
-      { title: 'Security Officer',           salary: '$32K–$55K/yr',  note: 'Entry-level, great foot in the door' },
-      { title: 'Emergency Mgmt. Coordinator',salary: '$55K–$90K/yr',  note: 'Disaster prep & response' },
-      { title: 'Building Concierge',         salary: '$35K–$60K/yr',  note: 'Tenant services & experience' },
-      { title: 'Access Control Specialist',  salary: '$45K–$75K/yr',  note: 'Technology + security systems' },
+      { title: 'Security Director',         salary: '$65K–$110K/yr', note: 'Full building security program' },
+      { title: 'Security Officer',          salary: '$32K–$55K/yr',  note: 'Entry-level, great foot in the door' },
+      { title: 'Building Concierge',        salary: '$35K–$60K/yr',  note: 'Tenant services & experience' },
+      { title: 'Access Control Specialist', salary: '$45K–$75K/yr',  note: 'Technology + security systems' },
     ],
     pathways: [
-      'Texas Security License (Level II or III) — required for most security roles in TX',
-      'CPP (Certified Protection Professional) from ASIS International',
-      'Hospitality or Business degree for concierge and management tracks',
+      'No 4-year degree required for entry-level security roles',
+      'Texas Security License (Level II or III) — required for most security roles in TX, earnable quickly',
+      'ACC — Criminal Justice and Homeland Security programs for career advancement',
+      'CPP (Certified Protection Professional) from ASIS International for senior roles',
+      'Hospitality or Business coursework for concierge and management tracks',
       'Military or law enforcement background is highly valued',
-      'ASIS International student membership — networking and certification prep',
     ],
     fact: 'Modern commercial building security goes far beyond a front desk. Today\'s systems integrate AI-powered cameras, biometric access control, mass-notification systems, and coordinated emergency response. It\'s a high-tech career.',
     next: 'Get your Texas Guard Card to start working in security. ASIS International at asisonline.org has career and certification resources. Many building management firms offer frontline-to-management career paths.',
@@ -909,11 +951,12 @@ const ZONES = {
       { title: 'Sustainability Coordinator',salary: '$50K–$90K/yr',  note: 'Green certifications (LEED, WELL)' },
     ],
     pathways: [
-      'Landscape Architecture degree (4-year, licensed) — Texas A&M, UT Austin',
-      'Associate degree in Horticulture or Landscape Technology',
+      'No degree required to start — many landscaping careers begin with a crew position',
+      'ACC — Horticulture and Landscape Management certificate and AAS programs',
+      'TSTC — Landscape Management and related programs, certificate options available',
       'TNLA (Texas Nursery & Landscape Association) certification programs',
-      'LEED Green Associate certification for a sustainability angle',
-      'Start with a local commercial landscaping company for hands-on experience',
+      'Landscape Architecture degree (4-year, licensed) — Texas A&M, UT Austin for design track',
+      'LEED Green Associate certification for a sustainability focus',
     ],
     fact: 'In Texas, water-efficient landscaping isn\'t just aesthetics — it\'s a major cost driver. A skilled irrigation specialist can save a commercial property tens of thousands of dollars per year on water bills alone.',
     next: 'TNLA at tnlaonline.org has Texas certification info. Texas A&M AgriLife and UT Austin have landscape horticulture programs. Search for internships with landscape architecture firms in the Austin metro.',
@@ -931,10 +974,11 @@ const ZONES = {
       { title: 'Parking Attendant',        salary: '$28K–$42K/yr',  note: 'Great entry point into the field' },
     ],
     pathways: [
-      'CAPP (Certified Administrator of Public Parking) from IPMI — industry standard',
-      'Business, Hospitality, or Operations Management degree',
+      'No degree required for entry-level — attendant and valet roles hire immediately',
+      'ACC — Business and Hospitality Management programs for moving into operations roles',
+      'TSTC — Business Technology certificate programs applicable to parking operations',
       'IPMI (International Parking & Mobility Institute) training and certification',
-      'Start as an attendant and advance — many parking managers started this way',
+      'CAPP (Certified Administrator of Public Parking) from IPMI — industry standard for managers',
       'EV charging infrastructure is a fast-growing specialization worth pursuing',
     ],
     fact: 'Parking can generate 10–15% of a commercial property\'s total revenue. A well-managed downtown highrise garage like Frost Bank Tower\'s can bring in hundreds of thousands of dollars annually — managing it is a real financial responsibility.',
@@ -954,14 +998,16 @@ const ZONES = {
       { title: 'Environmental Compliance Officer',salary:'$55K–$95K/yr', note: 'Regulations, reporting, audits' },
     ],
     pathways: [
-      'Electrical apprenticeship through IBEW Local 520 in Austin',
-      'Plumbing apprenticeship through UA Local 286 in Austin',
-      'LEED Green Associate → LEED AP for sustainability leadership',
-      'Environmental Science or Sustainability degree (UT Austin, St. Edward\'s University)',
-      'USGBC student chapters and resources at usgbc.org/students',
+      'No 4-year degree required for the trades — certificates and apprenticeships are the primary path',
+      'ACC — Electrical Technology and Plumbing Technology certificate programs (1–2 years)',
+      'TSTC — Electrical Technology and Plumbing Technology AAS degrees and short certificates',
+      'Electrical apprenticeship through IBEW Local 520 in Austin (earn while you learn)',
+      'Plumbing apprenticeship through UA Local 286 in Austin (earn while you learn)',
+      'LEED Green Associate → LEED AP certification for sustainability leadership roles',
+      'Environmental Science or Sustainability degree (UT Austin, St. Edward\'s) for the office track',
     ],
     fact: 'LEED-certified buildings use ~25% less energy and 11% less water than conventional buildings — and command 3–10% rent premiums. Sustainability expertise is no longer optional in CRE; it\'s one of the fastest-growing career tracks.',
-    next: 'IBEW Local 520 in Austin for electrical apprenticeships. UA Local 286 in Austin for plumbing apprenticeships. USGBC at usgbc.org/students for LEED resources. Both trades pay well without requiring a 4-year degree.',
+    next: 'ACC at austincc.edu and TSTC at tstc.edu both offer Electrical and Plumbing certificate programs — no 4-year degree needed and starting pay is strong. IBEW Local 520 and UA Local 286 run apprenticeships where you earn a paycheck from day one.',
   },
 };
 
