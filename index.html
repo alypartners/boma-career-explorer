@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BOMA Career Explorer — Frost Bank Tower</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0d1b2a;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* ── HEADER ── */
+header {
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.logo {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+.logo span { color: #f59e0b; }
+
+.header-sub {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 2px;
+}
+
+.header-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.pulse-badge {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #f59e0b;
+  animation: pulseBadge 2s ease-in-out infinite;
+}
+@keyframes pulseBadge {
+  0%,100% { transform:scale(1); opacity:1; }
+  50% { transform:scale(1.5); opacity:0.6; }
+}
+
+/* ── BUILDING WRAPPER ── */
+#scene {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+#building-svg {
+  height: 100%;
+  width: 100%;
+  max-height: calc(100vh - 62px);
+  display: block;
+}
+
+/* ── ZONE HOTSPOT DOTS ── */
+.hotspot {
+  cursor: pointer;
+}
+.hotspot .ring {
+  transform-origin: center;
+  animation: ringPulse 2.4s ease-out infinite;
+}
+.hotspot .dot {
+  animation: dotPulse 2.4s ease-in-out infinite;
+}
+.hotspot:hover .dot {
+  filter: brightness(1.3);
+}
+
+@keyframes ringPulse {
+  0%   { transform: scale(1); opacity: 0.85; }
+  70%  { transform: scale(2.8); opacity: 0; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+@keyframes dotPulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.18); }
+}
+
+/* ── OVERLAY ── */
+#overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 100;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#overlay.active { opacity: 1; pointer-events: all; }
+
+/* ── INFO PANEL ── */
+#panel-wrap {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  perspective: 1400px;
+  z-index: 200;
+  pointer-events: none;
+}
+
+#panel {
+  width: min(680px, 93vw);
+  max-height: 88vh;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 8px 20px rgba(0,0,0,0.3);
+  transform-origin: center top;
+  transform: rotateX(-80deg) scaleY(0.6);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.34,1.4,0.64,1), opacity 0.35s ease;
+  pointer-events: none;
+}
+
+#panel.open {
+  transform: rotateX(0deg) scaleY(1);
+  opacity: 1;
+  pointer-events: all;
+}
+#panel-wrap.open { pointer-events: all; }
+
+/* panel header */
+.p-header {
+  padding: 26px 28px 20px;
+  color: #fff;
+  position: relative;
+  flex-shrink: 0;
+}
+.p-icon { font-size: 2.6rem; display: block; margin-bottom: 8px; line-height: 1; }
+.p-title { font-size: 1.55rem; font-weight: 800; margin-bottom: 4px; letter-spacing: -0.3px; }
+.p-tagline { font-size: 0.9rem; opacity: 0.82; }
+
+.close-btn {
+  position: absolute; top: 16px; right: 16px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  border: none; color: #fff;
+  font-size: 1.1rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.close-btn:hover { background: rgba(255,255,255,0.32); }
+
+/* panel body */
+.p-body {
+  padding: 22px 28px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.sec-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+.sec-label:first-child { margin-top: 0; }
+
+/* career cards */
+.career-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media (max-width: 500px) {
+  .career-grid { grid-template-columns: 1fr; }
+}
+.career-card {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 11px 13px;
+  background: #f8fafc;
+  transition: border-color 0.15s;
+}
+.career-card:hover { border-color: #cbd5e1; }
+.cc-title { font-weight: 700; font-size: 0.88rem; color: #1e293b; margin-bottom: 3px; }
+.cc-salary { font-size: 0.78rem; color: #16a34a; font-weight: 700; }
+.cc-note { font-size: 0.73rem; color: #64748b; margin-top: 2px; }
+
+/* pathways */
+.path-list { list-style: none; }
+.path-list li {
+  padding: 7px 0;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.875rem;
+  color: #334155;
+  display: flex; gap: 9px; align-items: flex-start;
+}
+.path-list li:last-child { border-bottom: none; }
+.path-arrow { color: #f59e0b; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+
+/* callout boxes */
+.box-fact {
+  background: #fffbeb; border: 1.5px solid #fde68a;
+  border-radius: 14px; padding: 13px 15px; margin-top: 14px;
+}
+.box-fact .box-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #92400e; }
+.box-fact p { font-size: 0.855rem; color: #78350f; margin-top: 4px; line-height: 1.55; }
+
+.box-next {
+  background: #f0fdf4; border: 1.5px solid #86efac;
+  border-radius: 14px; padding: 13px 15px; margin-top: 10px;
+}
+.box-next .box-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #166534; }
+.box-next p { font-size: 0.855rem; color: #14532d; margin-top: 4px; line-height: 1.55; }
+
+/* ── BOTTOM NAV PILLS ── */
+#zone-nav {
+  position: fixed;
+  bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; gap: 7px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 9px 14px;
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.1);
+  z-index: 50;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 95vw;
+}
+.nav-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+.nav-pill:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.08);
+}
+
+/* ── ZONE HIGHLIGHT RECTS ── */
+.z-hi {
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: all;
+  cursor: pointer;
+}
+.z-hi:hover { opacity: 0.22; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo"><span>BOMA</span> Career Explorer</div>
+    <div class="header-sub">Frost Bank Tower · Austin, TX</div>
+  </div>
+  <div class="header-hint">
+    <div class="pulse-badge"></div>
+    Tap any glowing dot to explore careers
+  </div>
+</header>
+
+<div id="scene">
+  <svg id="building-svg" viewBox="0 0 900 690" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0d1b2a"/>
+        <stop offset="75%" stop-color="#1a3048"/>
+        <stop offset="100%" stop-color="#22405f"/>
+      </linearGradient>
+      <linearGradient id="gGround" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#1e2a1e"/>
+        <stop offset="100%" stop-color="#111"/>
+      </linearGradient>
+      <linearGradient id="gBuilding" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#172330"/>
+        <stop offset="40%"  stop-color="#1e2e40"/>
+        <stop offset="100%" stop-color="#172330"/>
+      </linearGradient>
+      <linearGradient id="gParking" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2a3140"/>
+        <stop offset="100%" stop-color="#161d28"/>
+      </linearGradient>
+      <linearGradient id="gLobby" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0f2235"/>
+        <stop offset="100%" stop-color="#071525"/>
+      </linearGradient>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="3" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+      <filter id="softglow">
+        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+
+    <!-- SKY -->
+    <rect width="900" height="690" fill="url(#gSky)"/>
+
+    <!-- Stars (JS-generated) -->
+    <g id="stars"></g>
+
+    <!-- Distant skyline silhouette -->
+    <g opacity="0.4">
+      <rect x="0"   y="430" width="70"  height="160" fill="#0e1a26" rx="1"/>
+      <rect x="55"  y="460" width="40"  height="130" fill="#0e1a26"/>
+      <rect x="80"  y="410" width="55"  height="180" fill="#0e1a26" rx="1"/>
+      <rect x="790" y="440" width="60"  height="150" fill="#0e1a26" rx="1"/>
+      <rect x="835" y="420" width="65"  height="170" fill="#0e1a26"/>
+      <rect x="850" y="460" width="50"  height="130" fill="#0e1a26"/>
+    </g>
+
+    <!-- GROUND -->
+    <rect x="0" y="578" width="900" height="112" fill="url(#gGround)"/>
+    <!-- Sidewalk -->
+    <rect x="0" y="578" width="900" height="14" fill="#2c2c2c"/>
+    <!-- Road line -->
+    <rect x="0" y="620" width="900" height="3"  fill="#3a3a3a" opacity="0.5"/>
+
+    <!-- Building shadow on ground -->
+    <ellipse cx="420" cy="587" rx="165" ry="8" fill="rgba(0,0,0,0.45)"/>
+
+    <!-- ══════════════════════════════════════
+         LOADING DOCK & DUMPSTER AREA (left)
+         ══════════════════════════════════════ -->
+    <rect x="140" y="488" width="145" height="92" fill="#1a2230" rx="1"/>
+    <!-- Dock door -->
+    <rect x="155" y="505" width="55" height="65" fill="#0d1520" rx="1"/>
+    <!-- Door slats -->
+    <line x1="155" y1="515" x2="210" y2="515" stroke="#243040" stroke-width="1.2"/>
+    <line x1="155" y1="525" x2="210" y2="525" stroke="#243040" stroke-width="1.2"/>
+    <line x1="155" y1="535" x2="210" y2="535" stroke="#243040" stroke-width="1.2"/>
+    <line x1="155" y1="545" x2="210" y2="545" stroke="#243040" stroke-width="1.2"/>
+    <line x1="155" y1="555" x2="210" y2="555" stroke="#243040" stroke-width="1.2"/>
+    <!-- Dumpsters -->
+    <rect x="222" y="530" width="30" height="24" fill="#065f46" rx="2"/>
+    <rect x="256" y="530" width="30" height="24" fill="#1e3a8a" rx="2"/>
+    <text x="237" y="545" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">♻</text>
+    <text x="271" y="545" font-size="9" fill="rgba(255,255,255,0.7)" text-anchor="middle">🗑</text>
+    <!-- dock label -->
+    <rect x="157" y="492" width="55" height="10" fill="rgba(0,0,0,0.3)" rx="1"/>
+    <text x="184" y="500" font-size="7" fill="rgba(255,255,255,0.45)" text-anchor="middle" letter-spacing="0.5">LOADING</text>
+
+    <!-- ══════════════════════════════════════
+         PARKING GARAGE (right)
+         ══════════════════════════════════════ -->
+    <rect x="560" y="385" width="138" height="193" fill="url(#gParking)" rx="1"/>
+    <!-- Floor lines -->
+    <line x1="560" y1="435" x2="698" y2="435" stroke="#2d3748" stroke-width="1.5"/>
+    <line x1="560" y1="485" x2="698" y2="485" stroke="#2d3748" stroke-width="1.5"/>
+    <line x1="560" y1="535" x2="698" y2="535" stroke="#2d3748" stroke-width="1.5"/>
+    <!-- Parking spots per level -->
+    <rect x="572" y="398" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="614" y="398" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="656" y="398" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="572" y="447" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="614" y="447" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="656" y="447" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="572" y="497" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="614" y="497" width="32" height="22" fill="#0d1825" rx="1"/>
+    <rect x="656" y="497" width="32" height="22" fill="#0d1825" rx="1"/>
+    <!-- "P" sign -->
+    <rect x="620" y="390" width="16" height="18" fill="#1d4ed8" rx="2"/>
+    <text x="628" y="403" font-size="10" fill="white" text-anchor="middle" font-weight="800">P</text>
+    <!-- Entrance ramp -->
+    <rect x="590" y="547" width="78" height="31" fill="#0d1520" rx="1"/>
+    <line x1="590" y1="563" x2="668" y2="563" stroke="#243040" stroke-width="1"/>
+
+    <!-- ══════════════════════════════════════
+         MAIN BUILDING TOWER
+         x=285 y=68 w=275 h=510
+         ══════════════════════════════════════ -->
+
+    <!-- Shadow / depth layer -->
+    <rect x="289" y="71" width="275" height="510" fill="#0a1520" rx="1"/>
+    <!-- Main facade -->
+    <rect x="285" y="68" width="275" height="510" fill="url(#gBuilding)" rx="1"/>
+
+    <!-- Vertical structural columns -->
+    <line x1="319" y1="68" x2="319" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+    <line x1="353" y1="68" x2="353" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+    <line x1="387" y1="68" x2="387" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+    <line x1="421" y1="68" x2="421" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+    <line x1="455" y1="68" x2="455" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+    <line x1="489" y1="68" x2="489" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+    <line x1="523" y1="68" x2="523" y2="488" stroke="rgba(255,255,255,0.035)" stroke-width="2"/>
+
+    <!-- Windows layer (JS-generated) -->
+    <g id="win-layer"></g>
+
+    <!-- Floor separator bands (every ~4 floors) -->
+    <g id="floor-bands"></g>
+
+    <!-- ══════════════════════════════════════
+         LOBBY GROUND FLOOR
+         ══════════════════════════════════════ -->
+    <rect x="285" y="488" width="275" height="90" fill="url(#gLobby)"/>
+    <!-- Lobby horizontal divider -->
+    <rect x="285" y="486" width="275" height="4" fill="#2d3d50"/>
+    <!-- Glass panels -->
+    <line x1="319" y1="488" x2="319" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <line x1="353" y1="488" x2="353" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <line x1="387" y1="488" x2="387" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <line x1="421" y1="488" x2="421" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <line x1="455" y1="488" x2="455" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <line x1="489" y1="488" x2="489" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <line x1="523" y1="488" x2="523" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <!-- Lobby warm light wash -->
+    <rect x="286" y="489" width="273" height="88" fill="rgba(255,190,50,0.04)"/>
+    <!-- Main entrance doors -->
+    <rect x="394" y="528" width="58" height="50" fill="#071425" rx="1"/>
+    <line x1="423" y1="528" x2="423" y2="578" stroke="#1a3550" stroke-width="1.5"/>
+    <rect x="401" y="553" width="8" height="2" fill="#60a5fa" rx="1"/>
+    <rect x="428" y="553" width="8" height="2" fill="#60a5fa" rx="1"/>
+    <!-- Building name -->
+    <rect x="322" y="497" width="202" height="22" fill="rgba(0,0,0,0.35)" rx="2"/>
+    <text x="423" y="512" font-size="9" fill="#f59e0b" text-anchor="middle" font-weight="800" letter-spacing="2">FROST BANK TOWER</text>
+    <!-- Canopy -->
+    <rect x="355" y="524" width="136" height="6" fill="#2d3d50" rx="1"/>
+
+    <!-- ══════════════════════════════════════
+         ROOF DETAILS
+         ══════════════════════════════════════ -->
+    <!-- Parapet -->
+    <rect x="285" y="62" width="275" height="8" fill="#2a3a4d"/>
+    <!-- HVAC unit 1 -->
+    <rect x="308" y="38" width="58" height="26" fill="#2d3d50" rx="2"/>
+    <rect x="313" y="32" width="48" height="8"  fill="#374a5e" rx="1"/>
+    <line x1="314" y1="42" x2="314" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="324" y1="42" x2="324" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="334" y1="42" x2="334" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="344" y1="42" x2="344" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="354" y1="42" x2="354" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <!-- HVAC unit 2 -->
+    <rect x="400" y="40" width="52" height="24" fill="#2d3d50" rx="2"/>
+    <rect x="405" y="34" width="42" height="8"  fill="#374a5e" rx="1"/>
+    <line x1="406" y1="44" x2="406" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="416" y1="44" x2="416" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="426" y1="44" x2="426" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <line x1="436" y1="44" x2="436" y2="61" stroke="#4a5e72" stroke-width="1.2"/>
+    <!-- HVAC unit 3 smaller -->
+    <rect x="480" y="44" width="40" height="20" fill="#2d3d50" rx="2"/>
+    <!-- Antenna -->
+    <line x1="510" y1="62" x2="510" y2="26" stroke="#4a5e72" stroke-width="2"/>
+    <circle cx="510" cy="24" r="4" fill="none" stroke="#4a5e72" stroke-width="1.5"/>
+    <rect x="506" y="18" width="8" height="7" fill="#2d3d50" opacity="0.8"/>
+    <!-- Rooftop edge light -->
+    <rect x="285" y="62" width="275" height="2" fill="rgba(100,180,255,0.15)"/>
+
+    <!-- ══════════════════════════════════════
+         ROPE ACCESS RAPPELLERS (right side)
+         ══════════════════════════════════════ -->
+    <!-- Anchor points at roof edge -->
+    <rect x="543" y="66" width="6" height="4" fill="#94a3b8" rx="1"/>
+    <rect x="557" y="66" width="6" height="4" fill="#94a3b8" rx="1"/>
+
+    <!-- Rappeller 1 — higher on building, ~floor 8 -->
+    <!-- Main rope -->
+    <line x1="546" y1="70" x2="544" y2="210" stroke="#cbd5e1" stroke-width="1.3" opacity="0.85"/>
+    <!-- Descender device -->
+    <rect x="540" y="188" width="8" height="5" fill="#475569" rx="1"/>
+    <!-- Harness chest cross -->
+    <line x1="537" y1="192" x2="551" y2="192" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Head (helmet) -->
+    <circle cx="544" cy="180" r="5"   fill="#f59e0b"/>
+    <rect   x="540" y="183" width="8" height="3" fill="#d97706" rx="0"/>
+    <!-- Torso / harness -->
+    <rect   x="541" y="185" width="6" height="10" fill="#1e3a5f" rx="1"/>
+    <!-- Legs -->
+    <line x1="542" y1="195" x2="539" y2="207" stroke="#1e3a5f" stroke-width="2.5"/>
+    <line x1="546" y1="195" x2="549" y2="207" stroke="#1e3a5f" stroke-width="2.5"/>
+    <!-- Arms out (working on glass) -->
+    <line x1="541" y1="187" x2="531" y2="193" stroke="#1e3a5f" stroke-width="2"/>
+    <line x1="547" y1="187" x2="556" y2="191" stroke="#1e3a5f" stroke-width="2"/>
+    <!-- Squeegee/tool in right hand -->
+    <line x1="556" y1="191" x2="560" y2="198" stroke="#94a3b8" stroke-width="1.5"/>
+    <rect  x="558" y="197" width="4"  height="9" fill="#64748b" rx="1"/>
+
+    <!-- Rappeller 2 — lower on building, ~floor 15, offset slightly -->
+    <line x1="560" y1="70" x2="561" y2="330" stroke="#cbd5e1" stroke-width="1.3" opacity="0.85"/>
+    <!-- Descender device -->
+    <rect x="557" y="308" width="8" height="5" fill="#475569" rx="1"/>
+    <!-- Harness -->
+    <line x1="554" y1="312" x2="568" y2="312" stroke="#64748b" stroke-width="1.5"/>
+    <!-- Head (helmet, different color) -->
+    <circle cx="561" cy="300" r="5"   fill="#3b82f6"/>
+    <rect   x="557" y="303" width="8" height="3" fill="#1d4ed8" rx="0"/>
+    <!-- Torso -->
+    <rect   x="558" y="305" width="6" height="10" fill="#1e3a5f" rx="1"/>
+    <!-- Legs -->
+    <line x1="559" y1="315" x2="556" y2="327" stroke="#1e3a5f" stroke-width="2.5"/>
+    <line x1="563" y1="315" x2="566" y2="327" stroke="#1e3a5f" stroke-width="2.5"/>
+    <!-- Arms -->
+    <line x1="558" y1="307" x2="548" y2="313" stroke="#1e3a5f" stroke-width="2"/>
+    <line x1="564" y1="307" x2="572" y2="311" stroke="#1e3a5f" stroke-width="2"/>
+    <!-- Tool -->
+    <line x1="572" y1="311" x2="576" y2="318" stroke="#94a3b8" stroke-width="1.5"/>
+    <rect  x="574" y="317" width="4"  height="9" fill="#64748b" rx="1"/>
+
+    <!-- ══════════════════════════════════════
+         TREES & LANDSCAPING
+         ══════════════════════════════════════ -->
+    <!-- Left tree 1 -->
+    <rect x="97"  y="552" width="10" height="28" fill="#4a2e0a" rx="1"/>
+    <ellipse cx="102" cy="542" rx="24" ry="18" fill="#14532d"/>
+    <ellipse cx="102" cy="535" rx="17" ry="13" fill="#166534"/>
+    <ellipse cx="102" cy="530" rx="11" ry="8"  fill="#15803d"/>
+    <!-- Left tree 2 -->
+    <rect x="183" y="555" width="9" height="23" fill="#4a2e0a" rx="1"/>
+    <ellipse cx="187" cy="546" rx="20" ry="16" fill="#14532d"/>
+    <ellipse cx="187" cy="540" rx="14" ry="11" fill="#15803d"/>
+    <!-- Left planter -->
+    <rect x="246" y="563" width="36" height="15" fill="#5c3d1a" rx="3"/>
+    <ellipse cx="264" cy="556" rx="17" ry="10" fill="#166534"/>
+    <ellipse cx="264" cy="552" rx="11" ry="7"  fill="#15803d"/>
+    <!-- Right planter -->
+    <rect x="565" y="563" width="36" height="15" fill="#5c3d1a" rx="3"/>
+    <ellipse cx="583" cy="556" rx="17" ry="10" fill="#166534"/>
+    <ellipse cx="583" cy="552" rx="11" ry="7"  fill="#15803d"/>
+    <!-- Right tree 1 -->
+    <rect x="710" y="552" width="10" height="28" fill="#4a2e0a" rx="1"/>
+    <ellipse cx="715" cy="542" rx="24" ry="18" fill="#14532d"/>
+    <ellipse cx="715" cy="535" rx="17" ry="13" fill="#166534"/>
+    <ellipse cx="715" cy="530" rx="11" ry="8"  fill="#15803d"/>
+    <!-- Right tree 2 -->
+    <rect x="770" y="556" width="9" height="23" fill="#4a2e0a" rx="1"/>
+    <ellipse cx="775" cy="547" rx="19" ry="15" fill="#14532d"/>
+    <ellipse cx="775" cy="541" rx="13" ry="10" fill="#15803d"/>
+
+    <!-- ══════════════════════════════════════
+         CLICKABLE ZONE HIGHLIGHTS (on top of everything)
+         ══════════════════════════════════════ -->
+    <!-- Zone: ROOF -->
+    <rect class="z-hi" id="zh-roof"       data-zone="roof"       x="285" y="30"  width="275" height="70"  fill="#f97316" rx="2"/>
+    <!-- Zone: OFFICES (upper half) -->
+    <rect class="z-hi" id="zh-offices"    data-zone="offices"    x="285" y="100" width="255" height="190" fill="#8b5cf6" rx="1"/>
+    <!-- Zone: WINDOWS (right edge strip + gondola) -->
+    <rect class="z-hi" id="zh-windows"    data-zone="windows"    x="538" y="68"  width="40"  height="420" fill="#3b82f6" rx="1"/>
+    <!-- Zone: JANITORIAL (lower office floors) -->
+    <rect class="z-hi" id="zh-janitorial" data-zone="janitorial" x="285" y="290" width="255" height="198" fill="#14b8a6" rx="1"/>
+    <!-- Zone: LOBBY -->
+    <rect class="z-hi" id="zh-lobby"      data-zone="lobby"      x="285" y="486" width="275" height="92"  fill="#ef4444" rx="1"/>
+    <!-- Zone: LANDSCAPE (left + right areas) -->
+    <rect class="z-hi" id="zh-landscape"  data-zone="landscape"  x="75"  y="516" width="208" height="72"  fill="#22c55e" rx="2"/>
+    <rect class="z-hi" id="zh-landscape2" data-zone="landscape"  x="560" y="548" width="165" height="42"  fill="#22c55e" rx="2"/>
+    <!-- Zone: PARKING -->
+    <rect class="z-hi" id="zh-parking"    data-zone="parking"    x="560" y="383" width="138" height="197" fill="#94a3b8" rx="1"/>
+    <!-- Zone: WASTE -->
+    <rect class="z-hi" id="zh-waste"      data-zone="waste"      x="138" y="484" width="148" height="96"  fill="#10b981" rx="1"/>
+
+    <!-- ══════════════════════════════════════
+         HOTSPOT CONNECTOR LINES
+         ══════════════════════════════════════ -->
+    <!-- Roof connector -->
+    <line x1="348" y1="22" x2="348" y2="35" stroke="#f97316" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Offices connector -->
+    <line x1="264" y1="195" x2="285" y2="195" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Windows connector -->
+    <line x1="632" y1="200" x2="580" y2="200" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Janitorial connector -->
+    <line x1="264" y1="370" x2="285" y2="370" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Lobby connector -->
+    <line x1="423" y1="605" x2="423" y2="580" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Landscape connector -->
+    <line x1="108" y1="540" x2="108" y2="555" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Parking connector -->
+    <line x1="714" y1="458" x2="698" y2="458" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Waste connector -->
+    <line x1="196" y1="478" x2="196" y2="490" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+
+    <!-- ══════════════════════════════════════
+         HOTSPOT INDICATOR DOTS
+         ══════════════════════════════════════ -->
+
+    <!-- ROOF & HVAC -->
+    <g class="hotspot" data-zone="roof" style="animation-delay:0s">
+      <circle class="ring" cx="348" cy="18" r="9" fill="none" stroke="#f97316" stroke-width="2.5" style="animation-delay:0s"/>
+      <circle class="dot"  cx="348" cy="18" r="6" fill="#f97316" style="animation-delay:0s"/>
+      <text x="362" y="22" font-size="11" fill="white" font-weight="700" font-family="system-ui">ROOF &amp; HVAC</text>
+    </g>
+
+    <!-- OFFICES -->
+    <g class="hotspot" data-zone="offices" style="animation-delay:0.3s">
+      <circle class="ring" cx="254" cy="195" r="9" fill="none" stroke="#8b5cf6" stroke-width="2.5" style="animation-delay:0.3s"/>
+      <circle class="dot"  cx="254" cy="195" r="6" fill="#8b5cf6" style="animation-delay:0.3s"/>
+      <text x="248" y="188" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">OFFICES &amp;</text>
+      <text x="248" y="202" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">PROPERTY MGMT</text>
+    </g>
+
+    <!-- WINDOWS -->
+    <g class="hotspot" data-zone="windows" style="animation-delay:0.6s">
+      <circle class="ring" cx="640" cy="200" r="9" fill="none" stroke="#3b82f6" stroke-width="2.5" style="animation-delay:0.6s"/>
+      <circle class="dot"  cx="640" cy="200" r="6" fill="#3b82f6" style="animation-delay:0.6s"/>
+      <text x="654" y="196" font-size="11" fill="white" font-weight="700" font-family="system-ui">WINDOWS &amp;</text>
+      <text x="654" y="209" font-size="11" fill="white" font-weight="700" font-family="system-ui">FACADE CARE</text>
+    </g>
+
+    <!-- JANITORIAL -->
+    <g class="hotspot" data-zone="janitorial" style="animation-delay:0.9s">
+      <circle class="ring" cx="254" cy="370" r="9" fill="none" stroke="#14b8a6" stroke-width="2.5" style="animation-delay:0.9s"/>
+      <circle class="dot"  cx="254" cy="370" r="6" fill="#14b8a6" style="animation-delay:0.9s"/>
+      <text x="248" y="364" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">JANITORIAL &amp;</text>
+      <text x="248" y="377" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">FACILITIES</text>
+    </g>
+
+    <!-- LOBBY -->
+    <g class="hotspot" data-zone="lobby" style="animation-delay:1.2s">
+      <circle class="ring" cx="423" cy="615" r="9" fill="none" stroke="#ef4444" stroke-width="2.5" style="animation-delay:1.2s"/>
+      <circle class="dot"  cx="423" cy="615" r="6" fill="#ef4444" style="animation-delay:1.2s"/>
+      <text x="423" y="633" font-size="11" fill="white" font-weight="700" text-anchor="middle" font-family="system-ui">LOBBY &amp; SECURITY</text>
+    </g>
+
+    <!-- LANDSCAPE -->
+    <g class="hotspot" data-zone="landscape" style="animation-delay:1.5s">
+      <circle class="ring" cx="108" cy="548" r="9" fill="none" stroke="#22c55e" stroke-width="2.5" style="animation-delay:1.5s"/>
+      <circle class="dot"  cx="108" cy="548" r="6" fill="#22c55e" style="animation-delay:1.5s"/>
+      <text x="100" y="542" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">LANDSCAPE &amp;</text>
+      <text x="100" y="555" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">GROUNDS</text>
+    </g>
+
+    <!-- PARKING -->
+    <g class="hotspot" data-zone="parking" style="animation-delay:1.8s">
+      <circle class="ring" cx="722" cy="458" r="9" fill="none" stroke="#94a3b8" stroke-width="2.5" style="animation-delay:1.8s"/>
+      <circle class="dot"  cx="722" cy="458" r="6" fill="#94a3b8" style="animation-delay:1.8s"/>
+      <text x="736" y="454" font-size="11" fill="white" font-weight="700" font-family="system-ui">PARKING</text>
+      <text x="736" y="467" font-size="11" fill="white" font-weight="700" font-family="system-ui">OPERATIONS</text>
+    </g>
+
+    <!-- WASTE & SUSTAINABILITY -->
+    <g class="hotspot" data-zone="waste" style="animation-delay:2.1s">
+      <circle class="ring" cx="196" cy="474" r="9" fill="none" stroke="#10b981" stroke-width="2.5" style="animation-delay:2.1s"/>
+      <circle class="dot"  cx="196" cy="474" r="6" fill="#10b981" style="animation-delay:2.1s"/>
+      <text x="188" y="468" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">WASTE &amp;</text>
+      <text x="188" y="481" font-size="11" fill="white" font-weight="700" text-anchor="end" font-family="system-ui">SUSTAINABILITY</text>
+    </g>
+
+  </svg>
+</div>
+
+<!-- Overlay -->
+<div id="overlay"></div>
+
+<!-- Info Panel -->
+<div id="panel-wrap">
+  <div id="panel">
+    <div class="p-header" id="p-header">
+      <button class="close-btn" id="close-btn" aria-label="Close">✕</button>
+      <span class="p-icon" id="p-icon">🏢</span>
+      <h2 class="p-title" id="p-title">Title</h2>
+      <p class="p-tagline" id="p-tagline">Tagline</p>
+    </div>
+    <div class="p-body" id="p-body"></div>
+  </div>
+</div>
+
+<!-- Bottom navigation pills -->
+<div id="zone-nav"></div>
+
+<script>
+// ── STARS ──────────────────────────────────────────────
+const starsG = document.getElementById('stars');
+const svgNS  = 'http://www.w3.org/2000/svg';
+for (let i = 0; i < 90; i++) {
+  const c = document.createElementNS(svgNS, 'circle');
+  c.setAttribute('cx', Math.random() * 900);
+  c.setAttribute('cy', Math.random() * 380);
+  const r = Math.random() * 1.4 + 0.2;
+  c.setAttribute('r', r);
+  c.setAttribute('fill', `rgba(255,255,255,${(Math.random() * 0.6 + 0.3).toFixed(2)})`);
+  starsG.appendChild(c);
+}
+
+// ── BUILDING WINDOWS (JS-generated) ───────────────────
+(function generateWindows() {
+  const layer = document.getElementById('win-layer');
+  const bands = document.getElementById('floor-bands');
+  const BL = 285, BW = 275;
+  const COLS = 8, COL_W = BW / COLS; // ~34.375
+  const WIN_W = 21, WIN_H = 13;
+  const ROW_H = 19;
+  const START_Y = 78, END_Y = 486;
+  const totalRows = Math.floor((END_Y - START_Y) / ROW_H);
+
+  // Seed-ish random for consistent look
+  let seed = 42;
+  function rng() { seed = (seed * 16807 + 0) % 2147483647; return (seed - 1) / 2147483646; }
+
+  for (let row = 0; row < totalRows; row++) {
+    const y = START_Y + row * ROW_H;
+    if (y + WIN_H > END_Y) break;
+
+    // Floor band every 4 rows
+    if (row > 0 && row % 4 === 0) {
+      const band = document.createElementNS(svgNS, 'rect');
+      band.setAttribute('x', BL + 1);
+      band.setAttribute('y', y - 3);
+      band.setAttribute('width', BW - 2);
+      band.setAttribute('height', 3);
+      band.setAttribute('fill', 'rgba(0,0,0,0.25)');
+      bands.appendChild(band);
+    }
+
+    for (let col = 0; col < COLS; col++) {
+      const x = BL + 5 + col * COL_W + (COL_W - WIN_W) / 2;
+      const rand = rng();
+      const lit  = rand > 0.32;
+      const warm = rng() > 0.55;
+
+      let fill;
+      if (lit) {
+        if (warm) {
+          const r = 245 + Math.floor(rng() * 10);
+          const g = 165 + Math.floor(rng() * 45);
+          const b = 40  + Math.floor(rng() * 30);
+          const a = (0.65 + rng() * 0.3).toFixed(2);
+          fill = `rgba(${r},${g},${b},${a})`;
+        } else {
+          const r = 80  + Math.floor(rng() * 50);
+          const g = 150 + Math.floor(rng() * 70);
+          const b = 215 + Math.floor(rng() * 40);
+          const a = (0.55 + rng() * 0.35).toFixed(2);
+          fill = `rgba(${r},${g},${b},${a})`;
+        }
+      } else {
+        fill = 'rgba(8,18,34,0.85)';
+      }
+
+      const win = document.createElementNS(svgNS, 'rect');
+      win.setAttribute('x', x.toFixed(1));
+      win.setAttribute('y', y);
+      win.setAttribute('width', WIN_W);
+      win.setAttribute('height', WIN_H);
+      win.setAttribute('fill', fill);
+      win.setAttribute('rx', '0.5');
+      layer.appendChild(win);
+    }
+  }
+})();
+
+// ── CAREER DATA ────────────────────────────────────────
+const ZONES = {
+  roof: {
+    title: 'Roof & HVAC Systems',
+    icon: '🌡️',
+    color: '#c2410c',
+    tagline: 'Keeping every floor comfortable — 365 days a year',
+    careers: [
+      { title: 'HVAC Technician',       salary: '$45K–$85K/yr',  note: 'High demand, great overtime pay' },
+      { title: 'Building Engineer',     salary: '$55K–$95K/yr',  note: 'Manages all mechanical systems' },
+      { title: 'Energy Manager',        salary: '$65K–$110K/yr', note: 'Reduce costs, improve efficiency' },
+      { title: 'Controls Technician',   salary: '$50K–$88K/yr',  note: 'Programs smart building systems' },
+      { title: 'Refrigeration Mechanic',salary: '$50K–$82K/yr',  note: 'Chillers, cooling towers, more' },
+      { title: 'Roofing Contractor',    salary: '$42K–$75K/yr',  note: 'Inspection, repair, waterproofing' },
+    ],
+    pathways: [
+      'HVAC/R certification at a community college or trade school (6–18 months)',
+      'Registered apprenticeship with a local mechanical contractor',
+      'Associate degree in Building Systems or Mechanical Technology',
+      'EPA 608 certification — required for refrigerant handling, earnable now',
+      'ASHRAE student membership — the top HVAC professional organization',
+    ],
+    fact: 'Commercial buildings use 40% of all U.S. energy — and HVAC alone accounts for ~40% of a building\'s energy bill. An HVAC career means working on the frontline of climate and cost.',
+    next: 'Search "HVAC apprenticeship Austin TX" to find local programs. The EPA 608 certification exam can be taken while still in school. Visit ashrae.org/students for resources.',
+  },
+  windows: {
+    title: 'Windows & Facade Maintenance',
+    icon: '🪟',
+    color: '#1d4ed8',
+    tagline: 'Skills, safety, and the best views in the city',
+    careers: [
+      { title: 'High-Rise Window Cleaner',  salary: '$38K–$65K/yr',  note: 'Adventure at altitude' },
+      { title: 'Rope Access Technician',    salary: '$45K–$85K/yr',  note: 'Specialized rigging & safety' },
+      { title: 'Facade Inspector',          salary: '$55K–$90K/yr',  note: 'Structural assessment expertise' },
+      { title: 'Building Maintenance Tech', salary: '$40K–$70K/yr',  note: 'Glass, caulking, sealants' },
+      { title: 'Curtain Wall Specialist',   salary: '$50K–$90K/yr',  note: 'High-tech glass systems' },
+    ],
+    pathways: [
+      'On-the-job training — many window cleaning companies hire with zero experience',
+      'SPRAT (Society of Professional Rope Access Technicians) certification',
+      'IWCA (International Window Cleaning Association) training programs',
+      'OSHA 10 or 30-hour safety certification — often required, earnable online',
+      'Building maintenance associate programs at local community colleges',
+    ],
+    fact: 'Frost Bank Tower\'s glass curtain wall requires a specialized rope-access crew several days to clean the exterior — and that happens multiple times per year. Technicians certified in rope access can work on skyscrapers worldwide.',
+    next: 'Reach out to local commercial cleaning companies for summer or part-time work. OSHA 10 courses are available online at oshaeducationcenter.com. IWCA directory at iwca.org.',
+  },
+  offices: {
+    title: 'Offices & Property Management',
+    icon: '🏢',
+    color: '#6d28d9',
+    tagline: 'The business brain running behind every lease',
+    careers: [
+      { title: 'Property Manager',         salary: '$60K–$120K/yr',  note: 'Oversees entire building operations' },
+      { title: 'Asset Manager',            salary: '$85K–$160K/yr',  note: 'Maximizes investment returns' },
+      { title: 'Leasing Agent',            salary: '$50K–$100K/yr',  note: 'Base + commissions on deals' },
+      { title: 'Real Estate Analyst',      salary: '$65K–$115K/yr',  note: 'Financial modeling & valuation' },
+      { title: 'Tenant Relations Manager', salary: '$55K–$90K/yr',   note: 'Keeps tenants happy & retained' },
+      { title: 'Commercial Broker',        salary: '$60K–$200K+/yr', note: 'Highly commission-driven' },
+    ],
+    pathways: [
+      'Business, Finance, or Real Estate degree (4-year university)',
+      'IREM CPM® (Certified Property Manager) designation — the industry gold standard',
+      'BOMI RPA® (Real Property Administrator) designation',
+      'Texas Real Estate License — required for leasing/brokerage (180-hour course + exam)',
+      'BOMA Young Professionals program — networking + continuing education',
+      'Internships with major firms: JLL, CBRE, Cushman & Wakefield, Transwestern',
+    ],
+    fact: 'Commercial Real Estate is a multi-trillion dollar U.S. industry. The property manager at Frost Bank Tower oversees millions of dollars in assets and dozens of tenant relationships — decisions they make daily affect hundreds of businesses.',
+    next: 'Join IREM\'s student chapter at irem.org/students. Connect with BOMA Austin for events and mentorship. Search LinkedIn for CRE internships in the Austin metro.',
+  },
+  janitorial: {
+    title: 'Janitorial & Facilities Management',
+    icon: '🧹',
+    color: '#0f766e',
+    tagline: 'The foundation every thriving building is built on',
+    careers: [
+      { title: 'Facilities Manager',           salary: '$60K–$110K/yr', note: 'Oversees all building operations' },
+      { title: 'Janitorial Supervisor',         salary: '$38K–$65K/yr',  note: 'Manages cleaning teams & schedules' },
+      { title: 'Environmental Services Dir.',   salary: '$55K–$95K/yr',  note: 'Sanitation + compliance' },
+      { title: 'Building Operations Specialist',salary: '$45K–$80K/yr',  note: 'Day-to-day systems oversight' },
+      { title: 'Industrial Hygienist',          salary: '$65K–$105K/yr', note: 'Air quality, mold, safety' },
+    ],
+    pathways: [
+      'IFMA FMP® (Facility Management Professional) — key entry-level credential',
+      'IFMA CFM® (Certified Facility Manager) for experienced professionals',
+      'Associate or bachelor\'s degree in Facilities Management, Business, or Engineering',
+      'BSCAI (Building Service Contractors Association International) training',
+      'Start as a building porter or technician and advance through experience',
+    ],
+    fact: 'Facilities managers handle everything from floor-care scheduling to emergency preparedness. Clean, well-maintained buildings retain tenants longer and command higher rents — this role directly drives property value.',
+    next: 'IFMA at ifma.org has student chapters at many universities, including UT Austin. The FMP certification is a great first credential to earn early in your career.',
+  },
+  lobby: {
+    title: 'Lobby, Security & Guest Services',
+    icon: '🔐',
+    color: '#b91c1c',
+    tagline: 'First impressions and around-the-clock protection',
+    careers: [
+      { title: 'Security Director',          salary: '$65K–$110K/yr', note: 'Full building security program' },
+      { title: 'Security Officer',           salary: '$32K–$55K/yr',  note: 'Entry-level, great foot in the door' },
+      { title: 'Emergency Mgmt. Coordinator',salary: '$55K–$90K/yr',  note: 'Disaster prep & response' },
+      { title: 'Building Concierge',         salary: '$35K–$60K/yr',  note: 'Tenant services & experience' },
+      { title: 'Access Control Specialist',  salary: '$45K–$75K/yr',  note: 'Technology + security systems' },
+    ],
+    pathways: [
+      'Texas Security License (Level II or III) — required for most security roles in TX',
+      'CPP (Certified Protection Professional) from ASIS International',
+      'Hospitality or Business degree for concierge and management tracks',
+      'Military or law enforcement background is highly valued',
+      'ASIS International student membership — networking and certification prep',
+    ],
+    fact: 'Modern commercial building security goes far beyond a front desk. Today\'s systems integrate AI-powered cameras, biometric access control, mass-notification systems, and coordinated emergency response. It\'s a high-tech career.',
+    next: 'Get your Texas Guard Card to start working in security. ASIS International at asisonline.org has career and certification resources. Many building management firms offer frontline-to-management career paths.',
+  },
+  landscape: {
+    title: 'Landscaping & Grounds',
+    icon: '🌿',
+    color: '#15803d',
+    tagline: 'Curb appeal, sustainability, and living systems',
+    careers: [
+      { title: 'Grounds Manager',           salary: '$45K–$80K/yr',  note: 'Oversees all exterior grounds' },
+      { title: 'Landscape Architect',       salary: '$65K–$115K/yr', note: 'Design-focused, licensed profession' },
+      { title: 'Irrigation Specialist',     salary: '$42K–$72K/yr',  note: 'Water-efficient systems' },
+      { title: 'Horticulturist',            salary: '$40K–$70K/yr',  note: 'Plant health and selection' },
+      { title: 'Sustainability Coordinator',salary: '$50K–$90K/yr',  note: 'Green certifications (LEED, WELL)' },
+    ],
+    pathways: [
+      'Landscape Architecture degree (4-year, licensed) — Texas A&M, UT Austin',
+      'Associate degree in Horticulture or Landscape Technology',
+      'TNLA (Texas Nursery & Landscape Association) certification programs',
+      'LEED Green Associate certification for a sustainability angle',
+      'Start with a local commercial landscaping company for hands-on experience',
+    ],
+    fact: 'In Texas, water-efficient landscaping isn\'t just aesthetics — it\'s a major cost driver. A skilled irrigation specialist can save a commercial property tens of thousands of dollars per year on water bills alone.',
+    next: 'TNLA at tnlaonline.org has Texas certification info. Texas A&M AgriLife and UT Austin have landscape horticulture programs. Search for internships with landscape architecture firms in the Austin metro.',
+  },
+  parking: {
+    title: 'Parking Operations',
+    icon: '🚗',
+    color: '#475569',
+    tagline: 'Revenue, technology, and mobility management',
+    careers: [
+      { title: 'Parking Manager',          salary: '$50K–$90K/yr',  note: 'Runs a full parking operation' },
+      { title: 'Revenue Control Analyst',  salary: '$45K–$75K/yr',  note: 'Financial oversight + tech systems' },
+      { title: 'Transportation Coordinator',salary:'$45K–$80K/yr',  note: 'Mobility + EV infrastructure' },
+      { title: 'Valet Supervisor',         salary: '$38K–$65K/yr',  note: 'High-service environment' },
+      { title: 'Parking Attendant',        salary: '$28K–$42K/yr',  note: 'Great entry point into the field' },
+    ],
+    pathways: [
+      'CAPP (Certified Administrator of Public Parking) from IPMI — industry standard',
+      'Business, Hospitality, or Operations Management degree',
+      'IPMI (International Parking & Mobility Institute) training and certification',
+      'Start as an attendant and advance — many parking managers started this way',
+      'EV charging infrastructure is a fast-growing specialization worth pursuing',
+    ],
+    fact: 'Parking can generate 10–15% of a commercial property\'s total revenue. A well-managed downtown highrise garage like Frost Bank Tower\'s can bring in hundreds of thousands of dollars annually — managing it is a real financial responsibility.',
+    next: 'Visit parking.org (IPMI) for career resources and the CAPP certification pathway. Look for part-time attendant or valet positions locally to get hands-on experience.',
+  },
+  waste: {
+    title: 'Waste, Sustainability & Building Systems',
+    icon: '♻️',
+    color: '#047857',
+    tagline: 'Powering, plumbing, and greening the future',
+    careers: [
+      { title: 'Sustainability Manager',        salary: '$65K–$115K/yr', note: 'LEED, WELL, net-zero programs' },
+      { title: 'Waste & Recycling Coordinator', salary: '$45K–$75K/yr',  note: 'Programs + compliance' },
+      { title: 'Licensed Electrician',          salary: '$55K–$105K/yr', note: 'Commercial power systems' },
+      { title: 'Master Plumber',                salary: '$60K–$110K/yr', note: 'Water, drainage, piping' },
+      { title: 'Building Automation Technician',salary: '$55K–$95K/yr',  note: 'Smart building systems (BAS)' },
+      { title: 'Environmental Compliance Officer',salary:'$55K–$95K/yr', note: 'Regulations, reporting, audits' },
+    ],
+    pathways: [
+      'Electrical apprenticeship through IBEW Local 520 in Austin',
+      'Plumbing apprenticeship through UA Local 286 in Austin',
+      'LEED Green Associate → LEED AP for sustainability leadership',
+      'Environmental Science or Sustainability degree (UT Austin, St. Edward\'s University)',
+      'USGBC student chapters and resources at usgbc.org/students',
+    ],
+    fact: 'LEED-certified buildings use ~25% less energy and 11% less water than conventional buildings — and command 3–10% rent premiums. Sustainability expertise is no longer optional in CRE; it\'s one of the fastest-growing career tracks.',
+    next: 'IBEW Local 520 in Austin for electrical apprenticeships. UA Local 286 in Austin for plumbing apprenticeships. USGBC at usgbc.org/students for LEED resources. Both trades pay well without requiring a 4-year degree.',
+  },
+};
+
+// ── PANEL LOGIC ────────────────────────────────────────
+const overlay    = document.getElementById('overlay');
+const panelWrap  = document.getElementById('panel-wrap');
+const panel      = document.getElementById('panel');
+const pHeader    = document.getElementById('p-header');
+const pIcon      = document.getElementById('p-icon');
+const pTitle     = document.getElementById('p-title');
+const pTagline   = document.getElementById('p-tagline');
+const pBody      = document.getElementById('p-body');
+const closeBtn   = document.getElementById('close-btn');
+
+function openZone(id) {
+  const d = ZONES[id];
+  if (!d) return;
+
+  pHeader.style.background = `linear-gradient(140deg, ${d.color} 0%, ${d.color}bb 100%)`;
+  pIcon.textContent    = d.icon;
+  pTitle.textContent   = d.title;
+  pTagline.textContent = d.tagline;
+
+  const careerCards = d.careers.map(c => `
+    <div class="career-card">
+      <div class="cc-title">${c.title}</div>
+      <div class="cc-salary">${c.salary}</div>
+      <div class="cc-note">${c.note}</div>
+    </div>`).join('');
+
+  const pathItems = d.pathways.map(p => `
+    <li><span class="path-arrow">→</span>${p}</li>`).join('');
+
+  pBody.innerHTML = `
+    <div class="sec-label">Career Opportunities</div>
+    <div class="career-grid">${careerCards}</div>
+    <div class="sec-label">How to Get There</div>
+    <ul class="path-list">${pathItems}</ul>
+    <div class="box-fact">
+      <div class="box-label">💡 Did You Know?</div>
+      <p>${d.fact}</p>
+    </div>
+    <div class="box-next">
+      <div class="box-label">✅ Your Next Steps</div>
+      <p>${d.next}</p>
+    </div>`;
+
+  pBody.scrollTop = 0;
+  overlay.classList.add('active');
+  panelWrap.classList.add('open');
+  panel.classList.add('open');
+}
+
+function closePanel() {
+  overlay.classList.remove('active');
+  panelWrap.classList.remove('open');
+  panel.classList.remove('open');
+}
+
+closeBtn.addEventListener('click', closePanel);
+overlay.addEventListener('click', closePanel);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+
+// ── ATTACH CLICK EVENTS ────────────────────────────────
+// Hotspot groups
+document.querySelectorAll('.hotspot').forEach(el => {
+  el.addEventListener('click', () => openZone(el.dataset.zone));
+});
+
+// Zone highlight rects
+document.querySelectorAll('.z-hi').forEach(el => {
+  el.addEventListener('click', () => openZone(el.dataset.zone));
+});
+
+// ── BOTTOM NAV PILLS ──────────────────────────────────
+const nav = document.getElementById('zone-nav');
+const PILL_COLORS = {
+  roof:       '#f97316',
+  offices:    '#8b5cf6',
+  windows:    '#3b82f6',
+  janitorial: '#14b8a6',
+  lobby:      '#ef4444',
+  landscape:  '#22c55e',
+  parking:    '#94a3b8',
+  waste:      '#10b981',
+};
+const PILL_LABELS = {
+  roof: 'Roof & HVAC', offices: 'Offices', windows: 'Windows',
+  janitorial: 'Facilities', lobby: 'Lobby & Security',
+  landscape: 'Landscape', parking: 'Parking', waste: 'Sustainability',
+};
+Object.keys(ZONES).forEach(id => {
+  const pill = document.createElement('div');
+  pill.className = 'nav-pill';
+  pill.textContent = PILL_LABELS[id];
+  pill.style.setProperty('--c', PILL_COLORS[id]);
+  pill.addEventListener('click', () => openZone(id));
+  pill.addEventListener('mouseenter', () => {
+    pill.style.background = PILL_COLORS[id] + '33';
+    pill.style.borderColor = PILL_COLORS[id];
+    pill.style.color = '#fff';
+  });
+  pill.addEventListener('mouseleave', () => {
+    pill.style.background = '';
+    pill.style.borderColor = '';
+    pill.style.color = '';
+  });
+  nav.appendChild(pill);
+});
+</script>
+</body>
+</html>
