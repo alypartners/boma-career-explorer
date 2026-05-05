@@ -608,6 +608,48 @@ header {
     <rect x="217" y="511" width="15" height="2" fill="#1e3a5f" rx="0.5"/>
 
     <!-- ══════════════════════════════════════
+         CONSTRUCTION CRANE (far right)
+         ══════════════════════════════════════ -->
+    <!-- Mast -->
+    <rect x="798" y="58" width="7" height="522" fill="#334155"/>
+    <!-- Mast cross-bracing -->
+    <line x1="798" y1="100" x2="805" y2="155" stroke="#475569" stroke-width="1.2"/>
+    <line x1="805" y1="100" x2="798" y2="155" stroke="#475569" stroke-width="1.2"/>
+    <line x1="798" y1="155" x2="805" y2="210" stroke="#475569" stroke-width="1.2"/>
+    <line x1="805" y1="155" x2="798" y2="210" stroke="#475569" stroke-width="1.2"/>
+    <line x1="798" y1="210" x2="805" y2="270" stroke="#475569" stroke-width="1.2"/>
+    <line x1="805" y1="210" x2="798" y2="270" stroke="#475569" stroke-width="1.2"/>
+    <line x1="798" y1="270" x2="805" y2="330" stroke="#475569" stroke-width="1.2"/>
+    <line x1="805" y1="270" x2="798" y2="330" stroke="#475569" stroke-width="1.2"/>
+    <!-- Operator cab -->
+    <rect x="793" y="49"  width="18" height="14" fill="#1e40af" rx="1"/>
+    <rect x="795" y="51"  width="6"  height="8"  fill="#93c5fd" rx="0.5"/>
+    <!-- Apex peg -->
+    <rect x="800" y="38"  width="3"  height="13" fill="#334155"/>
+    <!-- Main jib (boom) -->
+    <line x1="801" y1="52" x2="714" y2="46" stroke="#f59e0b" stroke-width="4.5"/>
+    <!-- Counter-jib -->
+    <line x1="801" y1="52" x2="860" y2="56" stroke="#f59e0b" stroke-width="4.5"/>
+    <!-- Jib support cables from apex -->
+    <line x1="801" y1="38" x2="714" y2="46" stroke="#94a3b8" stroke-width="1.3"/>
+    <line x1="801" y1="38" x2="860" y2="56" stroke="#94a3b8" stroke-width="1.3"/>
+    <!-- Counterweight block -->
+    <rect x="853" y="54"  width="24" height="18" fill="#475569" rx="2"/>
+    <!-- Trolley on jib -->
+    <rect x="749" y="46"  width="6"  height="5"  fill="#374151"/>
+    <!-- Lift cable -->
+    <line x1="752" y1="51" x2="752" y2="260" stroke="#94a3b8" stroke-width="1.3"/>
+    <!-- Hook -->
+    <path d="M749,258 Q746,266 751,270 Q756,266 753,258" stroke="#94a3b8" stroke-width="1.5" fill="none"/>
+    <!-- Mast base / foundation -->
+    <rect x="787" y="578" width="29" height="8" fill="#374151" rx="1"/>
+    <!-- Safety stripes on mast (orange bands) -->
+    <rect x="798" y="440" width="7" height="6" fill="#f59e0b" opacity="0.8"/>
+    <rect x="798" y="460" width="7" height="6" fill="#f59e0b" opacity="0.8"/>
+    <rect x="798" y="480" width="7" height="6" fill="#f59e0b" opacity="0.8"/>
+    <rect x="798" y="500" width="7" height="6" fill="#f59e0b" opacity="0.8"/>
+
+    <!-- ══════════════════════════════════════
          CLICKABLE ZONE HIGHLIGHTS (on top of everything)
          ══════════════════════════════════════ -->
     <!-- Zone: ROOF -->
@@ -627,6 +669,10 @@ header {
     <rect class="z-hi" id="zh-parking"    data-zone="parking"    x="560" y="383" width="138" height="197" fill="#94a3b8" rx="1"/>
     <!-- Zone: WASTE -->
     <rect class="z-hi" id="zh-waste"      data-zone="waste"      x="138" y="484" width="148" height="96"  fill="#10b981" rx="1"/>
+    <!-- Zone: ACCOUNTING (right-side upper floors) -->
+    <rect class="z-hi" id="zh-accounting" data-zone="accounting" x="390" y="100" width="148" height="188" fill="#0891b2" rx="1"/>
+    <!-- Zone: CONSTRUCTION (crane area) -->
+    <rect class="z-hi" id="zh-construction" data-zone="construction" x="712" y="22" width="168" height="430" fill="#d97706" rx="1"/>
 
     <!-- ══════════════════════════════════════
          HOTSPOT CONNECTOR LINES
@@ -647,6 +693,10 @@ header {
     <line x1="714" y1="458" x2="698" y2="458" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
     <!-- Waste connector -->
     <line x1="196" y1="478" x2="196" y2="490" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Accounting connector -->
+    <line x1="648" y1="148" x2="538" y2="190" stroke="#0891b2" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
+    <!-- Construction connector -->
+    <line x1="840" y1="94" x2="820" y2="58" stroke="#d97706" stroke-width="1.5" stroke-dasharray="3,2.5" opacity="0.6"/>
 
     <!-- ══════════════════════════════════════
          HOTSPOT INDICATOR DOTS
@@ -704,6 +754,22 @@ header {
       <circle class="dot"  cx="722" cy="458" r="6" fill="#94a3b8" style="animation-delay:1.8s"/>
       <text x="736" y="454" font-size="11" fill="white" font-weight="700" font-family="system-ui">PARKING</text>
       <text x="736" y="467" font-size="11" fill="white" font-weight="700" font-family="system-ui">OPERATIONS</text>
+    </g>
+
+    <!-- ACCOUNTING -->
+    <g class="hotspot" data-zone="accounting" style="animation-delay:2.1s">
+      <circle class="ring" cx="656" cy="148" r="9" fill="none" stroke="#0891b2" stroke-width="2.5" style="animation-delay:2.1s"/>
+      <circle class="dot"  cx="656" cy="148" r="6" fill="#0891b2" style="animation-delay:2.1s"/>
+      <text x="670" y="144" font-size="11" fill="white" font-weight="700" font-family="system-ui">ACCOUNTING &amp;</text>
+      <text x="670" y="157" font-size="11" fill="white" font-weight="700" font-family="system-ui">FINANCE</text>
+    </g>
+
+    <!-- CONSTRUCTION -->
+    <g class="hotspot" data-zone="construction" style="animation-delay:2.4s">
+      <circle class="ring" cx="840" cy="100" r="9" fill="none" stroke="#d97706" stroke-width="2.5" style="animation-delay:2.4s"/>
+      <circle class="dot"  cx="840" cy="100" r="6" fill="#d97706" style="animation-delay:2.4s"/>
+      <text x="840" y="118" font-size="11" fill="white" font-weight="700" text-anchor="middle" font-family="system-ui">CONSTRUCTION</text>
+      <text x="840" y="131" font-size="11" fill="white" font-weight="700" text-anchor="middle" font-family="system-ui">&amp; PROJECT MGMT</text>
     </g>
 
     <!-- WASTE & SUSTAINABILITY -->
@@ -981,6 +1047,55 @@ const ZONES = {
     fact: 'Parking can generate 10–15% of a commercial property\'s total revenue. A well-managed downtown highrise garage like Frost Bank Tower\'s can bring in hundreds of thousands of dollars annually — managing it is a real financial responsibility.',
     next: 'Visit parking.org (IPMI) for career resources and the CAPP certification pathway. Look for part-time attendant or valet positions locally to get hands-on experience.',
   },
+  accounting: {
+    title: 'Accounting & Finance',
+    icon: '💰',
+    color: '#0369a1',
+    tagline: 'The numbers behind every square foot',
+    careers: [
+      { title: 'Property Accountant',      salary: '$55K–$90K/yr',   note: 'Core role at every CRE firm' },
+      { title: 'Senior Accountant',        salary: '$70K–$105K/yr',  note: 'Financials for a portfolio of assets' },
+      { title: 'Controller',               salary: '$90K–$145K/yr',  note: 'Oversees all financial reporting' },
+      { title: 'AP/AR Specialist',         salary: '$40K–$65K/yr',   note: 'Great entry point, no degree required' },
+      { title: 'Financial Analyst',        salary: '$65K–$105K/yr',  note: 'Modeling, forecasting, budgeting' },
+      { title: 'CFO',                      salary: '$130K–$250K+/yr',note: 'Top of the financial leadership track' },
+    ],
+    pathways: [
+      'No 4-year degree required for AP/AR and bookkeeping roles — start here and grow',
+      'ACC — Accounting certificate and AAS degree programs (1–2 years)',
+      'TSTC — Business Technology certificate programs with accounting coursework',
+      'Accounting or Finance degree (UT Austin, St. Edward\'s, ACC transfer path)',
+      'CPA (Certified Public Accountant) — the gold standard for senior and controller roles',
+      'QuickBooks and Excel certifications are highly valued for entry-level positions',
+    ],
+    fact: 'Every commercial property — from a single office suite to a million-square-foot portfolio — requires dedicated financial management. Property accountants track millions in rent, expenses, and capital projects every month.',
+    next: 'ACC at austincc.edu offers Accounting certificates you can complete in under a year. Search "property accountant Austin" on LinkedIn for entry-level openings. The BOMA Austin network is a great way to get introductions.',
+  },
+  construction: {
+    title: 'Construction & Project Management',
+    icon: '🏗️',
+    color: '#b45309',
+    tagline: 'Building the spaces where businesses thrive',
+    careers: [
+      { title: 'Construction Project Manager', salary: '$75K–$145K/yr',  note: 'Runs the whole job from start to finish' },
+      { title: 'Project Engineer',             salary: '$65K–$105K/yr',  note: 'Coordinates specs, subs, schedules' },
+      { title: 'Superintendent',               salary: '$70K–$125K/yr',  note: 'Field leadership, daily site operations' },
+      { title: 'Estimator',                    salary: '$65K–$110K/yr',  note: 'Bids projects, controls cost from day one' },
+      { title: 'Owner\'s Representative',      salary: '$90K–$165K/yr',  note: 'Represents the owner\'s interests' },
+      { title: 'Tenant Improvement (TI) Mgr', salary: '$80K–$140K/yr',  note: 'Builds out office suites for tenants' },
+    ],
+    pathways: [
+      'No 4-year degree required for trades and field roles — many PMs started as laborers',
+      'ACC — Construction Technology certificate and AAS programs',
+      'TSTC — Building Construction Technology AAS degree and certificates',
+      'Construction Management or Civil Engineering degree (UT Austin, Texas State)',
+      'PMP (Project Management Professional) certification — valued across all PM roles',
+      'LEED AP certification for sustainable construction projects',
+      'Start with a general contractor as a laborer, apprentice, or office coordinator',
+    ],
+    fact: 'Every tenant moving into a building like this one requires a build-out — new walls, finishes, electrical, and more. Tenant Improvement (TI) construction is a booming niche in Austin\'s commercial real estate market, driven by the city\'s explosive growth.',
+    next: 'ACC at austincc.edu and TSTC at tstc.edu both have Construction Technology programs. Look for entry-level roles at Austin-area general contractors like Endeavor, Andres Construction, or Joeris. The Associated General Contractors (AGC) Texas chapter at agctexas.org has student resources.',
+  },
   waste: {
     title: 'Waste, Sustainability & Building Systems',
     icon: '♻️',
@@ -1082,19 +1197,22 @@ document.querySelectorAll('.z-hi').forEach(el => {
 // ── BOTTOM NAV PILLS ──────────────────────────────────
 const nav = document.getElementById('zone-nav');
 const PILL_COLORS = {
-  roof:       '#f97316',
-  offices:    '#8b5cf6',
-  windows:    '#3b82f6',
-  janitorial: '#14b8a6',
-  lobby:      '#ef4444',
-  landscape:  '#22c55e',
-  parking:    '#94a3b8',
-  waste:      '#10b981',
+  roof:         '#f97316',
+  offices:      '#8b5cf6',
+  windows:      '#3b82f6',
+  janitorial:   '#14b8a6',
+  lobby:        '#ef4444',
+  landscape:    '#22c55e',
+  parking:      '#94a3b8',
+  waste:        '#10b981',
+  accounting:   '#0891b2',
+  construction: '#d97706',
 };
 const PILL_LABELS = {
   roof: 'Roof & HVAC', offices: 'Offices', windows: 'Windows',
   janitorial: 'Facilities', lobby: 'Lobby & Security',
   landscape: 'Landscape', parking: 'Parking', waste: 'Sustainability',
+  accounting: 'Accounting & Finance', construction: 'Construction & PM',
 };
 Object.keys(ZONES).forEach(id => {
   const pill = document.createElement('div');
